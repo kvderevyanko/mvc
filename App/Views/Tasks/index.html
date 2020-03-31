@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block body %}
+<h2>{{title}}</h2>
+
+<div class="clearfix">
+    <a href="/tasks/create" class="btn btn-info pull-left">Добавить задачу</a>
+
+    {% if adminLogin %}
+    <form method="post" action="/admin/index" class="login pull-right">
+        <input type="hidden" name="logout" value="1">
+        <button type="submit" class="btn btn-warning">Выйти</button>
+    </form>
+    {% else %}
+    <a href="/admin/index" class="btn btn-success pull-right">Авторизация</a>
+    {% endif %}
+
+</div>
+
+
+
+
+{% if totalTasks > 0 %}
+    <h5>Всего задач: {{ totalTasks }}</h5>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th nowrap="nowrap">
+                    <a href="/?page={{page}}&order=username&sort={% if sort == 'ASC' %}DESC{% else %}ASC{% endif %}">
+                        Имя пользователя
+                    </a>
+                </th>
+                <th width="20%">
+                    <a href="/?page={{page}}&order=email&sort={% if sort == 'ASC' %}DESC{% else %}ASC{% endif %}">
+                        E-mail
+                    </a>
+                </th>
+                <th width="45%">
+                    <a href="/?page={{page}}&order=text&sort={% if sort == 'ASC' %}DESC{% else %}ASC{% endif %}">
+                        Задача
+                    </a>
+                </th>
+                <th width="15%">
+                    <a href="/?page={{page}}&order=status&sort={% if sort == 'ASC' %}DESC{% else %}ASC{% endif %}">
+                        Статус
+                    </a>
+                </th>
+                {% if adminLogin %}
+                <th width="3%">
+
+                </th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task.username|e }}</td>
+            <td>{{ task.email|e }}</td>
+            <td>{{ task.text|e }}</td>
+            <td>
+                {% if task.status %}Выполнена{% else %}Новая{% endif %}
+                {% if task.edited %}<br>Отредактировано администратором{% endif %}
+            </td>
+            {% if adminLogin %}
+            <td>
+                <a href="/tasks/edit?id={{ task.id }}">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                </a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    {% if pages > 1 %}
+    <nav>
+        <ul class="pagination">
+            {% for i in 1..pages %}
+            <li {% if i==page %}class="active"{% endif %}>
+                <a href="/?page={{i}}{% if order %}&order={{order}}{% endif %}{% if sort %}&sort={{sort}}{% endif %}">
+                    {{ i }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+    {% endif %}
+
+{% else %}
+    <h3>Нет задач</h3>
+{% endif %}
+
+{% endblock %}

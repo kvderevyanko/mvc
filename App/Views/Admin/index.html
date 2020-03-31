@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block body %}
+<h2>{{title}}</h2>
+
+
+{% if adminLogin %}
+    <form method="post" class="login">
+        <input type="hidden" name="logout" value="1">
+        <button type="submit" class="btn btn-warning">Выйти</button>
+    </form>
+{% else %}
+    {% if post|length > 0 %}
+    <div class="alert alert-danger" role="alert">
+        Введенные данные не верные
+    </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post" class="login">
+                <label>Имя пользователя</label>
+                <input type="text" class="form-control" name="username"
+                       value="{% if post.username is defined %}{{ post.username|trim }}{% endif %}">
+                <label>Пароль</label>
+                <input type="password" class="form-control" name="password" value="">
+
+                <button type="submit" class="btn btn-info">Войти</button>
+            </form>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}

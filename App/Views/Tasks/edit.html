@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block body %}
+<h2>{{title}}</h2>
+
+{% if task %}
+<div class="row">
+    <div class="col-md-6">
+        {% if taskUpdated %}
+            <div class="alert alert-success" role="alert">
+                Задача изменена
+            </div>
+        {% endif %}
+        <form method="post" class="task-form">
+            <label>Имя пользователя: {{ task.username}}</label><br>
+            <label>Email: {{ task.email }}</label><br>
+
+            <label>Текст задачи</label>
+            {% if error and post.text|trim == "" %}
+                <div class="error">Введите текст задачи</div>
+            {% endif %}
+            <textarea class="form-control" name="text">{{ task.text }}</textarea>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <select name="status" class="form-control">
+                        <option value="">Новая</option>
+                        <option value="1" {% if task.status %}selected{% endif %}>Выполнена</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <button type="submit" class="btn btn-info">Изменить задачу</button>
+        </form>
+    </div>
+</div>
+{% else %}
+    <h4>Задача с ID {{id}} не найдена</h4>
+{% endif %}
+
+{% endblock %}

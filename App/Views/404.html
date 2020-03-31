@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Страница не найдена{% endblock %}
+
+{% block body %}
+
+    <h1>Страница не найдена</h1>
+    {% for log in error %}
+        <p>{{ log }}</p>
+    {% endfor %}
+
+{% endblock %}

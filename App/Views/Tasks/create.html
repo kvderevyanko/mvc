@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block body %}
+<h2>{{title}}</h2>
+<div class="row">
+    <div class="col-md-6">
+        {% if taskCreated %}
+            <div class="alert alert-success" role="alert">
+                Задача создана
+            </div>
+        {% endif %}
+        <form method="post" class="task-form">
+            <label>Имя пользователя</label>
+            {% if error and post.username|trim == "" %}
+                <div class="error">Введите имя пользователя</div>
+            {% endif %}
+            <input  type="text"  class="form-control" name="username"
+                   value="{% if post.username is defined %}{{ post.username|trim }}{% endif %}">
+
+            <label>Email</label>
+            {% if error and post.email|trim == "" %}
+                <div class="error">Введите email</div>
+            {% endif %}
+            {% if emailError %}
+                <div class="error">Email не корректный</div>
+            {% endif %}
+            <input  type="text"  class="form-control" name="email" value="{% if post.email is defined %}{{ post.email|trim }}{% endif %}">
+
+            <label>Текст задачи</label>
+            {% if error and post.text|trim == "" %}
+                <div class="error">Введите текст задачи</div>
+            {% endif %}
+            <textarea class="form-control"
+                      name="text">{% if post.text is defined %}{{ post.text|trim }}{% endif %}</textarea>
+
+            <button type="submit" class="btn btn-info">Добавить задачу</button>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}
